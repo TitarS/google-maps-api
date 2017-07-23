@@ -7,7 +7,7 @@
     <style>
         #map {
             width: 100%;
-            height: 400px;
+            height: 500px;
         }
     </style>
 </head>
@@ -18,24 +18,54 @@
         function initMap() {
             var element = document.getElementById('map');
             var options = {
-                zoom: 5,
-                center: {lat:50.4501,lng:30.5234}
+                zoom: 6,
+                center: {lat: 50.4501, lng: 30.5234}
             };
 
             var myMap = new google.maps.Map(element, options);
 
+            var markers = [
+                {
+                    coordinates: {lat: 50.62308, lng: 26.22743},
+                    image: {
+                        url: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/128/Map-Marker-Push-Pin-2-Chartreuse-icon.png',
+                        scaledSize: new google.maps.Size(48, 48)
+                    },
+                    info: '<h2>I\'m from here</h3>'
+                },
+                {
+                    coordinates: {lat: 50.4501, lng: 30.5234},
+                    info: '<h1>Now I am here</h1>'
+                }
+            ];
+
+            for(var i = 0; i < markers.length; i++) {
+                addMarker(markers[i]);
+            }
+
+        function addMarker(properties) {
             var marker = new google.maps.Marker({
-                position: {lat:50.4501,lng:30.5234},
+                position: properties.coordinates,
                 map: myMap
             });
 
-            var InfoWindow = new google.maps.InfoWindow({
-                content: '<h1>Hey there!</h1>'
-            });
+            if(properties.image) {
+                marker.setIcon({
+                    url: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/128/Map-Marker-Push-Pin-2-Chartreuse-icon.png',
+                    scaledSize: new google.maps.Size(48, 48)
+                });
+            }
 
-            marker.addListener('click',function(){
-                InfoWindow.open(myMap, marker);
-            })
+            if(properties.info) {
+                var InfoWindow = new google.maps.InfoWindow({
+                    content: properties.info
+                });
+
+                marker.addListener('click',function(){
+                    InfoWindow.open(myMap, marker);
+                })
+            }
+        }
         }
     </script>
 
